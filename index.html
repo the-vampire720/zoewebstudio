@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZWS | Zoe Web Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Modern Design System & CSS Variables */
+        :root {
+            --bg-dark: #09070f;
+            --purple-dark: #1a0b2e;
+            --purple-mid: #4a154b;
+            --purple-glow: #9d4edd;
+            --purple-light: #e0aaff;
+            --text-main: #f3f0f7;
+            --text-muted: #b3a9c2;
+            --glass-bg: rgba(26, 11, 46, 0.45);
+            --glass-border: rgba(157, 78, 221, 0.25);
+            --font-display: 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Quicksand', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(74, 21, 75, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(157, 78, 221, 0.15) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Fixed Navigation Header */
+        header {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(157, 78, 221, 0.1);
+            background: rgba(9, 7, 15, 0.7);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--purple-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        /* Multi-page Multi-step Screen System */
+        .page-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 24px 60px 24px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px 25px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(157, 78, 221, 0.1);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Safe Emoji Handling for Cross-Platform Sync */
+        .emoji {
+            font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+            font-style: normal;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+
+        /* Headings & Text */
+        h1, h2 {
+            font-family: var(--font-display);
+            color: #ffffff;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            text-align: center;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* Custom Interactive Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--purple-mid) 0%, #621166 100%);
+            border: 1px solid var(--purple-glow);
+            border-radius: 14px;
+            color: #ffffff;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.2);
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(157, 78, 221, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple-glow) 0%, #7b2cbf 100%);
+            border: none;
+            box-shadow: 0 8px 25px rgba(157, 78, 221, 0.4);
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            border: none;
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Options Page Grid (Page 3) */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(157, 78, 221, 0.15);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .option-card .emoji {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .option-card span.label {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            display: block;
+            font-weight: 500;
+        }
+
+        .option-card.selected {
+            background: rgba(157, 78, 221, 0.2);
+            border-color: var(--purple-glow);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.25);
+        }
+
+        /* Requirements Form UI (Page 4) */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--purple-light);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(9, 7, 15, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px;
+            color: #ffffff;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--purple-glow);
+        }
+
+        textarea.form-control {
+            resize: none;
+            min-height: 100px;
+        }
+
+        /* Specific Page Hero styling (Intro page) */
+        .intro-hero {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .intro-badge {
+            display: inline-block;
+            background: rgba(157, 78, 221, 0.15);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--purple-light);
+            font-family: var(--font-display);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* Enhanced Shimmer & Glowing Title Configuration */
+        .intro-title {
+            font-style: italic;
+            font-weight: 700;
+            background: linear-gradient(
+                90deg, 
+                #a255ff 0%, 
+                #ffffff 25%, 
+                #e0aaff 50%, 
+                #ffffff 75%, 
+                #a255ff 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(157, 78, 221, 0.35);
+            margin-bottom: 20px;
+            animation: textShimmerLinear 3.5s linear infinite;
+        }
+
+        @keyframes textShimmerLinear {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Features List View (Page 2) */
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 14px;
+            border-radius: 12px;
+            border-left: 3px solid var(--purple-glow);
+        }
+
+        .feature-item .emoji {
+            font-size: 1.3rem;
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+
+        .feature-text h4 {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .feature-text p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Progress Dots Indicators */
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 25px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--purple-glow);
+            width: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">ZOE WEB STUDIO</div>
+    </header>
+
+    <div class="page-container">
+
+        <div id="page1" class="page active">
+            <div class="intro-hero">
+                <span class="intro-badge"><span class="emoji">✨</span> Digital Excellence</span>
+                <h1 class="intro-title">Crafting Premium Custom Web Experiences</h1>
+                <p>Welcome to <strong>Zoe Web Studio (ZWS)</strong>. We transform your visions, emotions, and brand stories into beautiful, lightning-fast interactive websites.</p>
+                <button class="btn btn-primary" onclick="navigateTo(2)">Explore What We Do <span class="emoji">🚀</span></button>
+            </div>
+            <div class="progress-container">
+                <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <div id="page2" class="page">
+            <h2>Why Choose ZWS? <span class="emoji">💡</span></h2>
+            <p class="text-center" style="margin-bottom: 20px;">We specialize in creating unique, fully optimized personal and corporate spaces on the web.</p>
+            
+            <div class="feature-item">
+                <span class="emoji">🎨</span>
+                <div class="feature-text">
+                    <h4>Tailor-Made Layouts</h4>
+                    <p>No generic templates. Every single line of code is custom-built around your design preferences.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <span class="emoji">📱</span>
+                <div class="feature-text">
+                    <h4>Flawless Responsiveness</h4>
+                    <p>Engineered to scale down gorgeously across tablets, iPhones, and Android hardware configurations.</p>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <span class="emoji">⚡</span>
+                <div class="feature-text">
+                    <h4>High-End Speed & Transitions</h4>
+                    <p>Optimized architecture ensuring fluid transitions with absolute zero execution stuttering.</p>
+                </div>
+            </div>
+
+            <button class="btn" onclick="navigateTo(3)">View Available Project Types <span class="emoji">✨</span></button>
+            <div class="progress-container">
+                <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <div id="page3" class="page">
+            <h2>Select Project Type <span class="emoji">🛠️</span></h2>
+            <p class="text-center">Pick the category that matches what you are looking to build today:</p>
+            
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption(this, 'Birthday Wish Web')">
+                    <span class="emoji">🎂</span>
+                    <span class="label">Birthday Wish</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Eid Greeting Web')">
+                    <span class="emoji">🌙</span>
+                    <span class="label">Eid Greetings</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Anniversary Celebration Web')">
+                    <span class="emoji">💍</span>
+                    <span class="label">Anniversary</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Gift Package Showcase')">
+                    <span class="emoji">🎁</span>
+                    <span class="label">Gifts Landing</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Friendship Anniversary Web')">
+                    <span class="emoji">🤝</span>
+                    <span class="label">Friendship Day</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Happy Dynamic Web')">
+                    <span class="emoji">🌈</span>
+                    <span class="label">Happy Web</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Secret Confession Web')">
+                    <span class="emoji">🤫</span>
+                    <span class="label">Confessions</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Educational School Website')">
+                    <span class="emoji">🏫</span>
+                    <span class="label">School Web</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Brand Commercial Promotion')">
+                    <span class="emoji">📈</span>
+                    <span class="label">Brand Launch</span>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'Custom Concept')">
+                    <span class="emoji">🔮</span>
+                    <span class="label">Other Custom</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="validatePage3()">Provide Requirements <span class="emoji">📝</span></button>
+            <div class="progress-container">
+                <div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <div id="page4" class="page">
+            <h2>Project Specifications <span class="emoji">📝</span></h2>
+            <p class="text-center">Tell us a bit about your project details so we can plan it perfectly.</p>
+            
+            <div class="form-group">
+                <label for="userName">Your Full Name <span class="emoji">👤</span></label>
+                <input type="text" id="userName" class="form-control" placeholder="Enter your name">
+            </div>
+
+            <div class="form-group">
+                <label for="webTheme">Preferred Theme/Color Scheme <span class="emoji">🎨</span></label>
+                <input type="text" id="webTheme" class="form-control" placeholder="e.g., Purple & Black, Pastel Pink, Dark Mode">
+            </div>
+
+            <div class="form-group">
+                <label for="webDetails">Specific Text, Features, or Ideas <span class="emoji">💭</span></label>
+                <textarea id="webDetails" class="form-control" placeholder="Describe text, names, dates, images or special features you want included..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" onclick="validatePage4()">Review Contact Info <span class="emoji">➡️</span></button>
+            <div class="progress-container">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <div id="page5" class="page">
+            <h2>Connect on WhatsApp <span class="emoji">💬</span></h2>
+            <p class="text-center">Your order details have been securely structured into a professional brief. Click below to submit it directly to Zoe Web Studio!</p>
+            
+            <div style="background: rgba(255,255,255,0.02); padding: 16px; border-radius: 12px; border: 1px dashed var(--glass-border); margin-bottom: 25px;">
+                <p style="font-size: 0.9rem; margin-bottom: 0; text-align: center; color: var(--text-main);">
+                    <span class="emoji">📞</span> <strong>Studio Contact:</strong> 0370 5484626
+                </p>
+            </div>
+
+            <button class="btn btn-whatsapp" onclick="sendWhatsAppOrder()">
+                Open WhatsApp Chat <span class="emoji">💬</span>
+            </button>
+            <div class="progress-container">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+            </div>
+        </div>
+
+        <div id="page6" class="page">
+            <div class="text-center">
+                <span class="emoji" style="font-size: 3.5rem; display: block; margin-bottom: 15px;">🎉</span>
+                <h2>Thank You for Visiting!</h2>
+                <p style="margin-top: 15px;">Your inquiry has been successfully compiled. We look forward to building something extraordinary for you soon.</p>
+                <p style="font-size: 0.9rem; color: var(--purple-light);">— The Zoe Web Studio Team —</p>
+                <button class="btn" onclick="resetStudioFlow()">Return To Home <span class="emoji">🏠</span></button>
+            </div>
+            <div class="progress-container">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // State tracking variables
+        let selectedWebType = "";
+        const studioWhatsAppNumber = "923705484626"; // Structured with standard country routing code
+
+        // Seamless Multi-Page Router Animation Engine
+        function navigateTo(targetPageNumber) {
+            const currentActivePage = document.querySelector('.page.active');
+            const targetPageElement = document.getElementById(`page` + targetPageNumber);
+            
+            if (currentActivePage) {
+                currentActivePage.style.opacity = '0';
+                currentActivePage.style.transform = 'translateY(-15px)';
+                
+                setTimeout(() => {
+                    currentActivePage.classList.remove('active');
+                    targetPageElement.classList.add('active');
+                    
+                    // Force DOM reflow to trigger slide animations smoothly
+                    targetPageElement.offsetHeight; 
+                    
+                    targetPageElement.style.opacity = '1';
+                    targetPageElement.style.transform = 'translateY(0)';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 300);
+            }
+        }
+
+        // Selection Grid Controller for Page 3
+        function selectOption(element, webCategory) {
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedWebType = webCategory;
+        }
+
+        // Validation for Page 3
+        function validatePage3() {
+            if (!selectedWebType) {
+                alert("Please select a website type to continue! 💡");
+                return;
+            }
+            navigateTo(4);
+        }
+
+        // Validation for Page 4
+        function validatePage4() {
+            const name = document.getElementById('userName').value.trim();
+            if (!name) {
+                alert("Please provide your name so we know who we are chatting with! 👤");
+                return;
+            }
+            navigateTo(5);
+        }
+
+        // Form Compiler & Professional Text WhatsApp Forwarder
+        function sendWhatsAppOrder() {
+            const clientName = document.getElementById('userName').value.trim();
+            const clientTheme = document.getElementById('webTheme').value.trim() || "Studio Choice (Purple/Black)";
+            const clientDetails = document.getElementById('webDetails').value.trim() || "No specific details provided yet.";
+
+            // Constructing a structured, professional business inquiry message block
+            const introductionHeader = "✨ *NEW PROJECT INQUIRY | ZOE WEB STUDIO* ✨\n\n";
+            const bodyMessageText = 
+                "Hello Zoe Web Studio! I visited your website and would like to order a custom web experience.\n\n" +
+                "👤 *Client Name:* " + clientName + "\n" +
+                "🛠️ *Project Type:* " + selectedWebType + "\n" +
+                "🎨 *Theme/Colors:* " + clientTheme + "\n" +
+                "📝 *Requirements:* " + clientDetails + "\n\n" +
+                "Please let me know the pricing breakdown and estimated delivery window. Thanks!";
+
+            const compiledUrlPayload = "https://wa.me/" + studioWhatsAppNumber + "?text=" + encodeURIComponent(introductionHeader + bodyMessageText);
+            
+            // Execute safe cross-app handover navigation
+            window.open(compiledUrlPayload, '_blank');
+            
+            // Advance to the Thank You summary block automatically
+            setTimeout(() => {
+                navigateTo(6);
+            }, 800);
+        }
+
+        // Reset system to clean state
+        function resetStudioFlow() {
+            selectedWebType = "";
+            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+            document.getElementById('userName').value = "";
+            document.getElementById('webTheme').value = "";
+            document.getElementById('webDetails').value = "";
+            navigateTo(1);
+        }
+    </script>
+</body>
+</html>
+
